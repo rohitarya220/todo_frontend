@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const StateContext = createContext();
@@ -11,6 +12,7 @@ const baseURL = 'https://todo-backend-ht4t.onrender.com'
 export const ContextProvider = ({ children }) => {
   const [isLogIn, setIsLogIn] = useState(false)
   const token = 'bearer ' + localStorage.getItem('token')
+  // const navigate = useNavigate()
   console.log(token)
 
   const handleLogin = (token) => {

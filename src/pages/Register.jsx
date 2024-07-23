@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useStateContext } from '../context/ContextProvider';
 
-const Login = () => {
+const Register = () => {
   const { RegisterUser } = useStateContext();
 
   const [formData, setFormData] = useState({
@@ -20,7 +20,6 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const formDataString = JSON.stringify(formData);
     RegisterUser(formData);
   };
 
@@ -59,11 +58,11 @@ const Login = () => {
           Register
         </button>
       </form>
-      <NavLink to="/" className='m-8 text-xl font-medium cursor-pointer'>
+      <NavLink to="/login" className='m-8 text-xl font-medium cursor-pointer'>
         u have account? <span className='text-red-600'> Login</span>
       </NavLink>
     </div>
   );
 };
 
-export default Login;
+export default Register;
