@@ -34,6 +34,7 @@ export const ContextProvider = ({ children }) => {
         },
       });
       toast.success(response.message);
+      navigate('/login')
     } catch (error) {
       toast.error("Registration failed. Please try again.");
     }
