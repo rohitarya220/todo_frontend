@@ -1,34 +1,71 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Button } from 'antd';
+import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import CreateTodoModal from './CreateTodoModal';
+import { useStateContext } from '../context/ContextProvider';
 
 const TodoList = () => {
-  // Sample todo items (you can replace this with your dynamic data)
-  const todos = [
-    { id: 1, text: 'Example Todo Item 1' },
-    { id: 2, text: 'Example Todo Item 2' },
-    { id: 3, text: 'Example Todo Item 3' },
-    { id: 4, text: 'Example Todo Item 4' },
-    { id: 5, text: 'Example Todo Item 5' },
-    { id: 6, text: 'Example Todo Item 6' },
-    { id: 7, text: 'Example Todo Item 7' },
-    { id: 8, text: 'Example Todo Item 8' },
-    { id: 9, text: 'Example Todo Item 9' },
-    { id: 10, text: 'Example Todo Item 10' },
-    // Add more todo items as needed
-  ];
+  const { handleLogOut, getTodos, todoList } = useStateContext();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  useEffect(() => {
+    getTodos();
+  }, []);
+
+  const logOut = () => {
+    handleLogOut();
+  };
 
   return (
     <div className="max-w-screen-xl mx-auto py-6 px-4">
-      <h1 className="text-3xl font-bold text-center mb-8">Todo List</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {todos.map(todo => (
-          <div key={todo.id} className="bg-white shadow-md rounded-lg overflow-hidden">
-            <div className="p-4">
-              <p className="text-lg">{todo.text}</p>
-              <button className="mt-2 px-3 py-1 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 focus:outline-none">Complete</button>
+      <h1 className="text-4xl font-bold text-center mb-8">Todo List</h1>
+      <button onClick={logOut}> log out</button>
+      <div className="flex justify-center mb-8">
+        <Button
+          type="primary"
+          icon={<FaPlus />}
+          onClick={showModal}
+          className="flex items-center px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none transition"
+        >
+          Create Todo
+        </Button>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {todoList.map((todo, index) => (
+          <div
+            key={index} // Key prop should be on the outer element of the map return
+            className="bg-white shadow-lg rounded-lg overflow-hidden transition transform hover:scale-105 hover:shadow-xl"
+          >
+            <div className="p-6">
+              <h2 className="text-xl font-semibold mb-2">{todo.title}</h2>
+              <p className="text-gray-600">{todo.description}</p>
+              <div className="mt-4 flex justify-between items-center">
+                <button className="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none transition">
+                  Complete
+                </button>
+                <div className="flex space-x-2">
+                  <button className="text-blue-500 hover:text-blue-700 transition">
+                    <FaEdit />
+                  </button>
+                  <button className="text-red-500 hover:text-red-700 transition">
+                    <FaTrash />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         ))}
       </div>
+
+      <CreateTodoModal isModalVisible={isModalVisible} handleCancel={handleCancel} />
     </div>
   );
 };

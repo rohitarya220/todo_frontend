@@ -3,7 +3,12 @@ import { NavLink } from 'react-router-dom';
 import { useStateContext } from '../context/ContextProvider';
 
 const Register = () => {
-  const { RegisterUser } = useStateContext();
+  const { RegisterUser, isLogIn, navigate } = useStateContext();
+
+
+  if (isLogIn) {
+    return navigate('/')
+  }
 
   const [formData, setFormData] = useState({
     username: '',

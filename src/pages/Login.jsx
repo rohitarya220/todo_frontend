@@ -3,13 +3,16 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider";
 
 const Login = () => {
-  const { logIn } = useStateContext();
-  const navigate = useNavigate()
+  const { logIn, isLogIn, navigate } = useStateContext();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  if (isLogIn) {
+    return navigate('/')
+  }
+
   const handleLogin = () => {
-    logIn(email, password );
+    logIn(email, password);
   };
 
   return (
