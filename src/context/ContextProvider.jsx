@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 
 const StateContext = createContext();
 
@@ -14,6 +14,7 @@ export const ContextProvider = ({ children }) => {
   const tk = 'bearer ' + token;
   const navigate = useNavigate();
   const [todoList, setTodoList] = useState([]);
+  const [loading, setLoading] = useState(false)
   // console.log(tk);
 
   const handleLogin = (token) => {
@@ -28,20 +29,24 @@ export const ContextProvider = ({ children }) => {
 
   const RegisterUser = async (formData) => {
     try {
+      setLoading(true)
       const response = await axios.post(`${baseURL}/users/register`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      toast.success(response.message);
+      toast.success(response.data.message);
       navigate('/login')
     } catch (error) {
       toast.error("Registration failed. Please try again.");
+    } finally {
+      setLoading(false)
     }
   };
 
   const logIn = async (email, password) => {
     try {
+      setLoading(true)
       const response = await axios.post(
         `${baseURL}/users/login`,
         {
@@ -61,11 +66,14 @@ export const ContextProvider = ({ children }) => {
     } catch (error) {
       setIsLogIn(false);
       toast.error("Login failed. Please try again.");
+    } finally {
+      setLoading(false)
     }
   };
 
   const getTodos = async () => {
     try {
+      // setLoading{ true }
       const response = await axios.get(`${baseURL}/todos`, {
         headers: {
           "Content-Type": "application/json",
@@ -76,17 +84,20 @@ export const ContextProvider = ({ children }) => {
       setTodoList(data.data);
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      // setLoading{ false }
     }
   };
 
   const addTodo = async (title, description) => {
     try {
+      setLoading(true)
       const response = await axios.post(
         `${baseURL}/todos/create`,
-        { 
+        {
           title,
           description,
-         },
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -99,6 +110,8 @@ export const ContextProvider = ({ children }) => {
       getTodos();
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -119,6 +132,7 @@ export const ContextProvider = ({ children }) => {
     addTodo,
     todoList,
     getTodos,
+    loading
   };
 
   return (

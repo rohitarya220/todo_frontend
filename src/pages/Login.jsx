@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider";
+import { Spin } from 'antd';
 
 const Login = () => {
-  const { logIn, isLogIn, navigate } = useStateContext();
+  const { logIn, isLogIn, navigate, loading } = useStateContext();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -16,36 +17,55 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="text-5xl mt-32">Login</h1>
-      <div className="flex flex-col">
-        <input
-          type="email"
-          placeholder="Email"
-          className="border-2 border-red-300 mt-10 w-72 h-12 rounded-md"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="border-2 border-red-300 mt-10 w-72 h-12 rounded-md"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <div
-          className="flex justify-center items-center mt-12 w-72 text-xl bg-red-700 text-white font-bold h-14 border-2 border-red-700"
-        >
-          <button onClick={handleLogin}>Login</button>
+    <div className='flex flex-col items-center min-h-screen bg-gray-100'>
+      <div className='md:w-full max-w-md  mt-12'>
+        <div className='bg-white shadow-md rounded-lg md:px-8 px-10  pt-6 pb-8 mb-4'>
+          <h1 className='text-3xl font-bold text-center text-gray-900 mb-6'>Log In</h1>
+            <div>
+              <label htmlFor='email' className='block text-sm font-medium text-gray-700'>
+                Enter Email :
+              </label>
+              <input
+                type='email'
+                id='email'
+                name='email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className='outline-none p-1 mt-3 mb-4 block w-full border-gray-300 rounded-md shadow-sm focus:border-red-700 focus:ring focus:ring-red-700 focus:ring-opacity-50 pl-2'
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor='password' className='block text-sm font-medium text-gray-700'>
+                Enter Password :
+              </label>
+              <input
+                type='password'
+                id='password'
+                name='password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className='outline-none p-1 mt-3 block w-full border-gray-300 rounded-md shadow-sm focus:border-red-700 focus:ring focus:ring-red-700 focus:ring-opacity-50 pl-2'
+                required
+              />
+            </div>
+            <div>
+              <button
+                type='submit'
+                className='w-full mt-5 bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 outline-none'
+                onClick={handleLogin}
+              >
+                {loading ? <Spin size="small" /> : 'Login'}
+              </button>
+            </div>
+          <p className='mt-4 text-center text-sm text-gray-600'>
+          You don't have an account? {''}
+            <NavLink to="/register" className='text-red-700 font-medium hover:underline'>
+              Register
+            </NavLink>
+          </p>
         </div>
       </div>
-      <NavLink
-        to="/register"
-        className="m-8 text-xl font-medium cursor-pointer"
-      >
-        You don't have an account?{" "}
-        <span className="text-red-600">Register</span>{" "}
-      </NavLink>
     </div>
   );
 };
