@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NavLink } from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider";
 import { Spin } from 'antd';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const { logIn, isLogIn, navigate, loading } = useStateContext();
@@ -13,7 +14,9 @@ const Login = () => {
   }
 
   const handleLogin = () => {
-    logIn(email, password);
+    if(email && password) {
+      logIn(email, password);
+    } else toast.error('Please enter details')
   };
 
   return (
