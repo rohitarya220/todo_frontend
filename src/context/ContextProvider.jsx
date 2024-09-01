@@ -73,7 +73,6 @@ export const ContextProvider = ({ children }) => {
 
   const getTodos = async () => {
     try {
-      // setLoading{ true }
       const response = await axios.get(`${baseURL}/todos`, {
         headers: {
           "Content-Type": "application/json",
@@ -84,14 +83,11 @@ export const ContextProvider = ({ children }) => {
       setTodoList(data.data);
     } catch (error) {
       toast.error(error.message);
-    } finally {
-      // setLoading{ false }
     }
   };
 
   const addTodo = async (title, description) => {
     try {
-      setLoading(true)
       const response = await axios.post(
         `${baseURL}/todos/create`,
         {
@@ -105,15 +101,20 @@ export const ContextProvider = ({ children }) => {
           },
         }
       );
-      // const data = response?.data;
-      toast.success('Todo successfully added');
-      getTodos();
+  
+      // Check the status code of the response
+      if (response.status === 201) {
+        toast.success('Todo successfully added');
+        getTodos(); // Only call getTodos if the status is 201 Created
+      } else {
+        toast.error('Failed to add todo');
+      }
     } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false)
+      // Handle any errors that occur during the request
+      toast.error(`Error: ${error.message}`);
     }
   };
+  
 
   useEffect(() => {
     if (token) {
